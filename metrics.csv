@@ -1,0 +1,11 @@
+Complexity metrics,sex., 22 nov. 2024 18:04:35 BRT
+Method,CogC,ev(G),iv(G),v(G)
+"org.example.controllers.Controller.matchUriPattern(String, String, Map<String, String>)",6,5,4,6
+"org.example.controllers.Controller.methodMatches(Method, String, String, Map<String, String>)",8,5,9,9
+"org.example.ui.JobsUI.getValidJob(BufferedReader, LegalPersonEntity)",8,4,4,6
+org.example.ui.JobsUI.getValidLegalPerson(BufferedReader),7,4,3,5
+org.example.ui.Terminal.run(),5,2,3,20
+
+Class,OCavg,OCmax,WMC
+org.example.ui.Terminal,"2,46",20,32
+
