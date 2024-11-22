@@ -6,6 +6,7 @@ import org.example.dao.LegalPersonDao;
 import org.example.entity.JobEntity;
 import org.example.entity.LegalPersonEntity;
 import org.example.services.JobsService;
+import org.example.utils.ValidatorUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,6 +52,7 @@ public class JobsServiceImpl implements JobsService {
 
     @Override
     public JobEntity addJob(JobEntity job) {
+        ValidatorUtil.validate(job);
         job.getLocal().setId(addressDao.create(job.getLocal()).getId());
         jobDao.create(job);
         return job;

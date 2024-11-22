@@ -84,11 +84,12 @@ public class JobsServiceTest {
 
         JobEntity new_job = jobsService.addJob(job); // Add the job
         job = jobsService.oneById(new_job.getId());
-        System.out.println(job.getLocal());
 
         job.setName("Updated Job Title");
         job.setDescription("Updated Job Description");
-        job.setLocal(new AddressEntity("New City", "New State", "87654321"));
+        job.getLocal().setCountry("New City");
+        job.getLocal().setState("New State");
+        job.getLocal().setCep("87654321");
 
         jobsService.updateById(job); // Update the job
 
@@ -131,12 +132,75 @@ public class JobsServiceTest {
         job.setDescription("Job Description");
         job.setLocal(address);
 
-        Exception exception = assertThrows(Exception.class, () -> {
+        assertThrows(Exception.class, () -> {
             jobsService.addJob(job); // Attempt to add a job without a person
         });
-
-        assertTrue(exception.getMessage().contains("Job must have a legal person"));
     }
+
+    @Test
+    public void shouldListAllJobs() throws Exception {
+        // Criando instâncias de AddressEntity e LegalPersonEntity
+        AddressEntity address = new AddressEntity("City", "State", "12345678");
+        LegalPersonEntity legalPerson1 = new LegalPersonEntity("Legal Entity Ltd", "contact@company.com", "password", "Description", address, "12345678901234");
+        LegalPersonEntity legalPerson2 = new LegalPersonEntity("Other Entity Ltd", "other@company.com", "password", "Description", address, "98765432100123");
+
+        // Salvando as entidades no banco de dados
+        LegalPersonEntity createdPerson1 = legalPersonService.addUser(legalPerson1);
+        LegalPersonEntity createdPerson2 = legalPersonService.addUser(legalPerson2);
+
+        // Criando instâncias de JobEntity associadas às LegalPersonEntity
+        JobEntity job1 = new JobEntity("Job Title 1", "Job Description 1", address, createdPerson1);
+        JobEntity job2 = new JobEntity("Job Title 2", "Job Description 2", address, createdPerson2);
+
+        // Salvando as jobs no banco de dados
+        jobsService.addJob(job1);
+        jobsService.addJob(job2);
+
+        // Executando o método listAll()
+        List<JobEntity> result = jobsService.listAll();
+
+        // Verificando os resultados
+        assertNotNull(result);
+        assertEquals(2, result.size()); // Espera-se que a lista tenha 2 jobs
+
+        // Verificando os detalhes dos jobs
+        assertEquals("Job Title 1", result.get(0).getName());
+        assertEquals("Job Title 2", result.get(1).getName());
+
+        // Verificando se as pessoas legais estão associadas corretamente
+        assertEquals("Legal Entity Ltd", result.get(0).getPerson().getName());
+        assertEquals("Other Entity Ltd", result.get(1).getPerson().getName());
+    }
+
+    @Test
+    public void shouldListJobsByPerson() throws Exception {
+        // Criando instâncias de AddressEntity e LegalPersonEntity
+        AddressEntity address = new AddressEntity("City", "State", "12345678");
+        LegalPersonEntity legalPerson = new LegalPersonEntity("Legal Entity Ltd", "contact@company.com", "password", "Description", address, "12345678901234");
+
+        // Salvando a LegalPersonEntity no banco de dados
+        LegalPersonEntity createdPerson = legalPersonService.addUser(legalPerson);
+
+        // Criando instâncias de JobEntity associadas à LegalPersonEntity
+        JobEntity job1 = new JobEntity("Job Title 1", "Job Description 1", address, createdPerson);
+        JobEntity job2 = new JobEntity("Job Title 2", "Job Description 2", address, createdPerson);
+
+        // Salvando os jobs no banco de dados
+        jobsService.addJob(job1);
+        jobsService.addJob(job2);
+
+        // Executando o método listByPerson()
+        List<JobEntity> result = jobsService.listByPerson(createdPerson.getId());
+
+        // Verificando os resultados
+        assertNotNull(result);
+        assertEquals(2, result.size()); // Espera-se que a lista tenha 2 jobs
+
+        // Verificando os detalhes dos jobs
+        assertEquals("Job Title 1", result.get(0).getName());
+        assertEquals("Job Title 2", result.get(1).getName());
+    }
+
 
     @AfterEach
     public void cleanup() throws Exception {

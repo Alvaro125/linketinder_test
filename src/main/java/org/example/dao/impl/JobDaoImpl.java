@@ -39,9 +39,13 @@ public class JobDaoImpl implements JobDao {
     private String sqlQueryGetAll() {
         return """
                 SELECT jobs.id, jobs."idLegalPerson" ,jobs.name,jobs.description,
-                jobs.local,address.country,address.state,address.cep FROM jobs
+                jobs.local,address.country,address.state,lp.cnpj,p.name as namelp,address.cep FROM jobs
                 INNER JOIN address
-                ON address.id = jobs.local;\s""";
+                ON address.id = jobs.local\s
+                INNER JOIN legalpeople lp
+                ON lp.idPerson = jobs.idLegalPerson\s
+                INNER JOIN people p
+                ON p.id = jobs.idLegalPerson;""";
     }
 
     @Override
@@ -70,9 +74,14 @@ public class JobDaoImpl implements JobDao {
     private String sqlQueryGetByIdPerson() {
         return """
                 SELECT jobs.id, jobs."idLegalPerson" ,jobs.name,jobs.description,
-                jobs."local",address.country,address.state,address.cep FROM jobs
+                jobs."local",address.country,lp.cnpj,p.name as namelp, address.state,address.cep FROM jobs
                 INNER JOIN address
-                ON address.id = jobs."local" WHERE jobs."idLegalPerson" = ?;\s""";
+                ON address.id = jobs."local"\s
+                INNER JOIN legalpeople lp
+                ON lp.idPerson = jobs.idLegalPerson\s
+                INNER JOIN people p
+                ON p.id = jobs.idLegalPerson\s
+                WHERE jobs."idLegalPerson" = ?;\s""";
     }
 
     @Override

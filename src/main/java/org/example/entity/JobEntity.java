@@ -1,5 +1,9 @@
 package org.example.entity;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class JobEntity {
     public JobEntity(String name, String description, AddressEntity local, LegalPersonEntity person, Integer id) {
         this.name = name;
@@ -8,7 +12,16 @@ public class JobEntity {
         this.person = person;
         this.id = id;
     }
-    public JobEntity() {}
+    public JobEntity(String name, String description, AddressEntity local, LegalPersonEntity person) {
+        this.name = name;
+        this.description = description;
+        this.local = local;
+        this.person = person;
+        this.id = 0;
+    }
+    public JobEntity() {
+        this.id = 0;
+    }
 
     public String getName() {
         return name;
@@ -66,9 +79,20 @@ public class JobEntity {
                 """;
     }
 
+    @NotBlank(message = "O nome da vaga não pode estar vazio")
+    @Size(max = 100, message = "O nome da vaga deve ter no máximo 100 caracteres")
     private String name;
+
+    @NotBlank(message = "A descrição da vaga não pode estar vazia")
+    @Size(max = 500, message = "A descrição da vaga deve ter no máximo 500 caracteres")
     private String description;
+
+    @NotNull(message = "O endereço não pode ser nulo")
     private AddressEntity local;
+
+    @NotNull(message = "A empresa (pessoa jurídica) não pode ser nula")
     private LegalPersonEntity person;
+
+    @NotNull(message = "O ID da vaga não pode ser nulo")
     private Integer id;
 }

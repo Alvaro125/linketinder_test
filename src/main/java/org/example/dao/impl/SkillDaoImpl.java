@@ -217,7 +217,7 @@ public class SkillDaoImpl implements SkillDao {
     }
 
     private String sqlDeleteByIdPerson() {
-        return "DELETE FROM skills_people WHERE skills_id = ?";
+        return "DELETE FROM skills_people WHERE people_id = ?";
     }
 
     private void closeResultSetAndStatement(ResultSet result, PreparedStatement statement) {

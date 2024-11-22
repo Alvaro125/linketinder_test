@@ -83,13 +83,14 @@ public class SkillServiceTest {
 
         SkillEntity newSkill = new SkillEntity("Groovy", "Programming language",9);
         skillService.addSkill(newSkill);
-        SkillEntity skill = skillService.oneById(7);
-        skillService.addSkillByPerson(1, List.of(skill));
-        List<SkillEntity> skillsByPerson = skillService.listSkillsByPerson(1);
+        SkillEntity skill = skillService.oneById(8);
+        System.out.println(skill);
+        skillService.addSkillByPerson(7, List.of(skill));
+        List<SkillEntity> skillsByPerson = skillService.listSkillsByPerson(7);
 
         assertNotNull(skillsByPerson);
-        assertEquals(2, skillsByPerson.size());
-        SkillEntity lastSkill = skillsByPerson.get(1);
+        assertEquals(1, skillsByPerson.size());
+        SkillEntity lastSkill = skillsByPerson.get(0);
         assertEquals("Groovy", lastSkill.getTitle());
         assertEquals("Programming language", lastSkill.getDescription());
     }
@@ -107,7 +108,7 @@ public class SkillServiceTest {
         skillService.deleteAllbyPerson(idSkill);
 
         List<SkillEntity> skillsByPersonAfter = skillService.listSkillsByPerson(idPerson);
-        assertEquals(1, skillsByPersonAfter.size());
+        assertEquals(0, skillsByPersonAfter.size());
     }
 
     @Test
@@ -184,5 +185,24 @@ public class SkillServiceTest {
         assertThrows(RuntimeException.class, () -> {
             skillService.deleteById(999); // ID que não existe
         });
+    }
+
+    @Test
+    void shouldDeleteSkillsByPerson() throws SQLException {
+        SkillService skillService = new SkillServiceImpl(skillDao);
+
+        // Definindo o ID da pessoa
+        int idPerson = 7;
+
+        // Verificando as skills associadas à pessoa antes da exclusão
+        List<SkillEntity> skillsByPersonBefore = skillService.listSkillsByPerson(idPerson);
+        assertEquals(2, skillsByPersonBefore.size());  // Ajuste conforme o número esperado de skills associadas à pessoa
+
+        // Chamando o método para deletar as skills associadas à pessoa
+        skillService.deleteSkillByPerson(idPerson);
+
+        // Verificando as skills associadas à pessoa após a exclusão
+        List<SkillEntity> skillsByPersonAfter = skillService.listSkillsByPerson(idPerson);
+        assertEquals(0, skillsByPersonAfter.size());  // Espera-se que a lista de skills esteja vazia
     }
 }

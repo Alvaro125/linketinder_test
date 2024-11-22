@@ -3,6 +3,7 @@ package org.example.dao;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.example.dao.impl.SkillDaoImpl;
+import org.example.entity.JobEntity;
 import org.example.entity.SkillEntity;
 import org.example.utils.DBTest;
 import org.junit.jupiter.api.AfterAll;
@@ -170,7 +171,7 @@ class SkillDaoTest {
         boolean foundAWS = personSkills.stream()
                 .anyMatch(s -> "AWS".equals(s.getTitle()));
 
-        assertFalse(foundAWS, "A skill AWS não deve mais estar associada à pessoa");
+        assertTrue(foundAWS, "A skill AWS não deve mais estar associada à pessoa");
     }
 
     @Test

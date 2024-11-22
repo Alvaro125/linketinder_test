@@ -42,7 +42,7 @@ class JobDaoTest {
         address.setId(1); // Assumindo que o endereço com ID 1 existe no banco
 
         LegalPersonEntity legalPerson = new LegalPersonEntity();
-        legalPerson.setId(6); // Assumindo que a pessoa jurídica com ID 1 existe no banco
+        legalPerson.setId(5); // Assumindo que a pessoa jurídica com ID 1 existe no banco
         legalPerson.setName("Empresa de Teste");
         legalPerson.setCnpj("12.345.678/0001-99");
 
@@ -64,7 +64,6 @@ class JobDaoTest {
         // Verifica se o toString está correto para o primeiro trabalho da lista
         JobEntity job = jobs.get(0);
         assertNotNull(job.toString(), "O método toString() não deve retornar nulo");
-        System.out.println(job.toString());
     }
 
     @Test

@@ -86,7 +86,7 @@ class NaturalPersonDaoTest {
     @Test
     void testGetAll() {
         NaturalPersonEntity personNatural1 = createTestNaturalPerson();
-        personNatural1.setCpf("38755432100");
+        personNatural1.setCpf("98765000100");
         PersonEntity person1 = personDao.create(new PersonEntity(
                 personNatural1.getName(),
                 personNatural1.getEmail(),
@@ -96,7 +96,7 @@ class NaturalPersonDaoTest {
                 personNatural1.getId()));
         personNatural1.setId(person1.getId());
         NaturalPersonEntity personNatural2 = createTestNaturalPerson();
-        personNatural2.setCpf("98765432100");
+        personNatural2.setCpf("90005432100");
         personNatural2.setName("Maria Oliveira");
         PersonEntity person2 = personDao.create(new PersonEntity(
                 personNatural2.getName(),
